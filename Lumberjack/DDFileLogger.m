@@ -220,33 +220,6 @@
 	return _logsDirectory;
 }
 
-- (BOOL)isLogFile:(NSString *)fileName
-{
-	// A log file has a name like "log-<uuid>.txt", where <uuid> is a HEX-string of 6 characters.
-	// 
-	// For example: log-DFFE99.txt
-	
-	BOOL hasProperPrefix = [fileName hasPrefix:@"log-"];
-	
-	BOOL hasProperLength = [fileName length] >= 10;
-	
-	
-	if (hasProperPrefix && hasProperLength)
-	{
-		NSCharacterSet *hexSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789ABCDEF"];
-		
-		NSString *hex = [fileName substringWithRange:NSMakeRange(4, 6)];
-		NSString *nohex = [hex stringByTrimmingCharactersInSet:hexSet];
-		
-		if ([nohex length] == 0)
-		{
-			return YES;
-		}
-	}
-	
-	return NO;
-}
-
 /**
  * Returns an array of NSString objects,
  * each of which is the filePath to an existing log file on disk.
@@ -262,12 +235,8 @@
 	{
 		// Filter out any files that aren't log files. (Just for extra safety)
 		
-		if ([self isLogFile:fileName])
-		{
-			NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
-			
-			[unsortedLogFilePaths addObject:filePath];
-		}
+        NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
+        [unsortedLogFilePaths addObject:filePath];
 	}
 	
 	return unsortedLogFilePaths;
@@ -390,8 +359,11 @@
 	
 	NSString *logsDirectory = [self logsDirectory];
 	do
-	{
-		NSString *fileName = [NSString stringWithFormat:@"log-%@.txt", [self generateShortUUID]];
+    {
+        NSDateFormatter *formatter = [NSDateFormatter new];
+        formatter.dateFormat = @"yyyy-MM-dd-HHmm";
+        NSString *dateString = [formatter stringFromDate:[NSDate new]];
+		NSString *fileName = [NSString stringWithFormat:@"%@.txt", dateString];
 		
 		NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
 		
