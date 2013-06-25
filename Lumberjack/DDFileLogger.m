@@ -1,5 +1,7 @@
 #import "DDFileLogger.h"
 
+#import "DVCloudUserData.h"
+
 #import <unistd.h>
 #import <sys/attr.h>
 #import <sys/xattr.h>
@@ -363,7 +365,8 @@
         NSDateFormatter *formatter = [NSDateFormatter new];
         formatter.dateFormat = @"yyyy-MM-dd-HHmm";
         NSString *dateString = [formatter stringFromDate:[NSDate new]];
-		NSString *fileName = [NSString stringWithFormat:@"%@.txt", dateString];
+        NSString *dateStringWithApending = [NSString stringWithFormat:@"%@_%@", dateString, [DVCloudUserData vbName]];
+		NSString *fileName = [NSString stringWithFormat:@"%@.txt", dateStringWithApending];
 		
 		NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
 		
