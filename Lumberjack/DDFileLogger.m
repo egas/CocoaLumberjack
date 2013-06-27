@@ -365,7 +365,12 @@
         NSDateFormatter *formatter = [NSDateFormatter new];
         formatter.dateFormat = @"yyyy-MM-dd-HHmm";
         NSString *dateString = [formatter stringFromDate:[NSDate new]];
-        NSString *vbName = [DVCloudUserData vbName] ? [DVCloudUserData vbName] : @"unbekannt";
+        
+        NSString *vbName = @"unbekannt";
+        if([DVCloudUserData vbNumber]){
+            vbName = [DVCloudUserData vbName] ? [DVCloudUserData vbName] : @"unbekannt";
+        }
+        
         NSString *dateStringWithApending = [NSString stringWithFormat:@"%@_%@", dateString, vbName];
 		NSString *fileName = [NSString stringWithFormat:@"%@.txt", dateStringWithApending];
 		
