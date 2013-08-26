@@ -1,6 +1,6 @@
 #import "DDFileLogger.h"
 
-#import "DVCloudUserData.h"
+#import "DVUserData.h"
 
 #import <unistd.h>
 #import <sys/attr.h>
@@ -367,8 +367,8 @@
         NSString *dateString = [formatter stringFromDate:[NSDate new]];
         
         NSString *vbName = @"unbekannt";
-        if([DVCloudUserData vbNumber]){
-            vbName = [DVCloudUserData vbName] ? [DVCloudUserData vbName] : @"unbekannt";
+        if([DVUserData vbNumber]){
+            vbName = [DVUserData vbName] ? [DVUserData vbName] : @"unbekannt";
         }
         
         NSString *dateStringWithApending = [NSString stringWithFormat:@"%@_%@", dateString, vbName];
