@@ -360,34 +360,36 @@
 	// Generate a random log file name, and create the file (if there isn't a collision)
 	
 	NSString *logsDirectory = [self logsDirectory];
-	do
-    {
-        NSDateFormatter *formatter = [NSDateFormatter new];
-        formatter.dateFormat = @"yyyy-MM-dd-HHmm";
-        NSString *dateString = [formatter stringFromDate:[NSDate new]];
-        
-        NSString *vbName = @"unbekannt";
-        if([DVUserData vbNumber]){
-            vbName = [DVUserData vbName] ? [DVUserData vbName] : @"unbekannt";
+    
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"yyyy-MM-dd_HH-mm-ss.SSS";
+    
+    NSString *vbName = @"unbekannt";
+    if ([DVUserData vbNumber]) {
+        NSString *realVbName = [DVUserData vbName];
+        if (realVbName) {
+            vbName = realVbName;
         }
-        
-        NSString *dateStringWithApending = [NSString stringWithFormat:@"%@_%@", dateString, vbName];
-		NSString *fileName = [NSString stringWithFormat:@"%@.txt", dateStringWithApending];
-		
-		NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
-		
-		if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
-		{
-			NSLogVerbose(@"DDLogFileManagerDefault: Creating new log file: %@", fileName);
-			
-			[[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
-			
-			// Since we just created a new log file, we may need to delete some old log files
-			[self deleteOldLogFiles];
-			
-			return filePath;
-		}
-		
+    }
+    
+	do {
+        @autoreleasepool {
+            NSString *dateString = [formatter stringFromDate:[NSDate new]];
+            NSString *fileName = [NSString stringWithFormat:@"%@_%@.txt", dateString, vbName];
+            NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
+            {
+                NSLogVerbose(@"DDLogFileManagerDefault: Creating new log file: %@", fileName);
+                
+                [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
+                
+                // Since we just created a new log file, we may need to delete some old log files
+                [self deleteOldLogFiles];
+                
+                return filePath;
+            }
+        }
 	} while(YES);
 }
 
@@ -416,7 +418,7 @@
 		{
 			dateFormatter = [[NSDateFormatter alloc] init];
 			[dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4]; // 10.4+ style
-			[dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss:SSS"];
+			[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
 		}
 	}
 	return self;
