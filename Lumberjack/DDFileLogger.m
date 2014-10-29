@@ -1,7 +1,5 @@
 #import "DDFileLogger.h"
 
-#import "DVUserData.h"
-
 #import <unistd.h>
 #import <sys/attr.h>
 #import <sys/xattr.h>
@@ -364,18 +362,10 @@
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.dateFormat = @"yyyy-MM-dd_HH-mm-ss.SSS";
     
-    NSString *vbName = @"unbekannt";
-    if ([DVUserData vbNumber]) {
-        NSString *realVbName = [DVUserData vbName];
-        if (realVbName) {
-            vbName = realVbName;
-        }
-    }
-    
 	do {
         @autoreleasepool {
             NSString *dateString = [formatter stringFromDate:[NSDate new]];
-            NSString *fileName = [NSString stringWithFormat:@"%@_%@.txt", dateString, vbName];
+            NSString *fileName = [NSString stringWithFormat:@"%@.txt", dateString];
             NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
             
             if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
